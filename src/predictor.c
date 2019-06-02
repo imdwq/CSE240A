@@ -71,10 +71,10 @@ int maxLocalHistory;
 int localBHTRows;
 int localBHTIndex;
 
-uint8_t* selector;
 uint8_t p1 = NOTTAKEN; // outcome of predictor 1
 uint8_t p2 = NOTTAKEN; // outcome of predictor 2
 
+uint8_t* selector;
 void updateSelector(uint8_t outcome) {
 	uint8_t p1Correct = (p1 == outcome);
 	uint8_t p2Correct = (p1 == outcome);
@@ -135,47 +135,44 @@ init_predictor()
 	localBHTRows = 1 << lhistoryBits;
 
 	localPHT = (uint32_t*)malloc(sizeof(uint32_t) * localPHTRows);
-	for(int i=0; i < localPHTRows; i++) {
-		localPHT[i] = 0;
-	}
+	for(int i=0; i < localPHTRows; i++) localPHT[i] = 0;
 
 	localBHT = (uint8_t*)malloc(sizeof(uint8_t) * localBHTRows);
-	for(int i=0; i < localBHTRows; i++) {
-		localBHT[i] = 1;
-	}
+	for(int i=0; i < localBHTRows; i++) localBHT[i] = 1;
 
 	selector = (uint8_t*)malloc(sizeof(uint8_t) * localPHTRows);
-	for(int i=0; i < localPHTRows; i++) {
-		selector[i] = 1;
-	}
+	for(int i=0; i < localPHTRows; i++) selector[i] = 1;
+
 }
 
-
-uint8_t gshare_prediction(uint32_t pc) {
-	globalBHTIndex = (pc & maxGlobalHistory) ^ globalHistory;
-	assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
+uint8_t global_prediction() {
 	if(globalBHT[globalBHTIndex] == SN || globalBHT[globalBHTIndex] == WN) return NOTTAKEN;
 	else return TAKEN;
 }
 
-uint8_t tournament_prediction(uint32_t pc) {
-	localPHTIndex = pc & maxPC;
-	// local predictor
+uint8_t local_prediction() {
 	localBHTIndex = localPHT[localPHTIndex];
-	p1 = localBHT[localBHTIndex];
+	if(localBHT[localBHTIndex] == SN || localBHT[localBHTIndex] == WN) return NOTTAKEN;
+	else return TAKEN;
+}
+
+uint8_t gshare_prediction(uint32_t pc) {
+	globalBHTIndex = (pc & maxGlobalHistory) ^ globalHistory;
+	assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
+	return global_prediction();
+}
+
+uint8_t tournament_prediction(uint32_t pc) {
+	// local predictor
+	localPHTIndex = pc & maxPC;
+	p1 = local_prediction();
 	// global predictor
 	globalBHTIndex = globalHistory & maxGlobalHistory;
-	p2 = globalBHT[globalBHTIndex];
+	p2 = global_prediction();
 
 	// select
-	if(selector[localPHTIndex] <= 1) { // local
-		if(p1 == SN || p1 == WN) return NOTTAKEN;
-		else return TAKEN;
-	}
-	else { // global
-		if(p2 == SN || p2 == WN) return NOTTAKEN;
-		else return TAKEN;
-	}
+	if(selector[localPHTIndex] <= 1) return p1; // local
+	else return p2; // global
 }
 
 // Make a prediction for conditional branch instruction at PC 'pc'
