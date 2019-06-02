@@ -72,12 +72,10 @@ int localBHTRows;
 int localBHTIndex;
 
 uint8_t* selector;
-uint32_t* localPHT;
-uint8_t* localBHT;
+uint8_t p1 = NOTTAKEN; // outcome of predictor 1
+uint8_t p2 = NOTTAKEN; // outcome of predictor 2
 
 void updateSelector(uint8_t outcome) {
-	uint8_t p1 = localBHT[localBHTIndex];
-	uint8_t p2 = globalBHT[globalBHTIndex];
 	uint8_t p1Correct = (p1 == outcome);
 	uint8_t p2Correct = (p1 == outcome);
 	if(p1Correct > p2Correct) { // 1, 0
@@ -88,11 +86,13 @@ void updateSelector(uint8_t outcome) {
 	}
 }
 
+uint32_t* localPHT;
 void updateLocalPHT(uint8_t outcome) {
   localPHT[localPHTIndex] = (localPHT[localPHTIndex] << 1) | outcome;
   localPHT[localPHTIndex] &= maxLocalHistory;
 }
 
+uint8_t* localBHT;
 void updateLocalBHT(uint8_t outcome) {
 	assert(localBHTIndex >=0 && localBHTIndex < localBHTRows);
 	if(outcome == NOTTAKEN) {
@@ -124,7 +124,6 @@ init_predictor()
 
 	globalBHT = (uint8_t*)malloc(sizeof(uint8_t) * globalBHTRows);
 	for(int i=0; i < globalBHTRows; i++) {
-		assert(i < globalBHTRows);
 		globalBHT[i] = 1;
 	}
 
@@ -137,19 +136,16 @@ init_predictor()
 
 	localPHT = (uint32_t*)malloc(sizeof(uint32_t) * localPHTRows);
 	for(int i=0; i < localPHTRows; i++) {
-		assert(i < localPHTRows);
 		localPHT[i] = 0;
 	}
 
 	localBHT = (uint8_t*)malloc(sizeof(uint8_t) * localBHTRows);
 	for(int i=0; i < localBHTRows; i++) {
-		assert(i < localBHTRows);
 		localBHT[i] = 1;
 	}
 
 	selector = (uint8_t*)malloc(sizeof(uint8_t) * localPHTRows);
 	for(int i=0; i < localPHTRows; i++) {
-		assert(i < localPHTRows);
 		selector[i] = 1;
 	}
 }
@@ -164,16 +160,20 @@ uint8_t gshare_prediction(uint32_t pc) {
 
 uint8_t tournament_prediction(uint32_t pc) {
 	localPHTIndex = pc & maxPC;
-	assert(localPHTIndex >= 0 && localPHTIndex < localPHTRows);
+	// local predictor
+	localBHTIndex = localPHT[localPHTIndex];
+	p1 = localBHT[localBHTIndex];
+	// global predictor
+	globalBHTIndex = globalHistory & maxGlobalHistory;
+	p2 = globalBHT[globalBHTIndex];
+
+	// select
 	if(selector[localPHTIndex] <= 1) { // local
-		localBHTIndex = localPHT[localPHTIndex];
-		if(localBHT[localBHTIndex] == SN || localBHT[localBHTIndex] == WN) return NOTTAKEN;
+		if(p1 == SN || p1 == WN) return NOTTAKEN;
 		else return TAKEN;
 	}
 	else { // global
-		globalBHTIndex = globalHistory & maxGlobalHistory;
-		assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
-		if(globalBHT[globalBHTIndex] == SN || globalBHT[globalBHTIndex] == WN) return NOTTAKEN;
+		if(p2 == SN || p2 == WN) return NOTTAKEN;
 		else return TAKEN;
 	}
 }
