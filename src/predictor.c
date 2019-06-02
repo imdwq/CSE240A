@@ -52,7 +52,7 @@ int globalBHTIndex;
 void updateGlobalBHT(uint8_t outcome) {
 	assert(globalBHTIndex < globalBHTRows);
 	if(outcome == NOTTAKEN) {
-		if(globalBHT[globalBHTIndex] != SN)
+		if(globalBHT[globalBHTIndex] != SN) 
 			globalBHT[globalBHTIndex] --;
 	}
 	else {
@@ -71,28 +71,28 @@ int maxLocalHistory;
 int localBHTRows;
 int localBHTIndex;
 
-uint8_t selector;
-uint8_t p1;
-uint8_t p2;
+uint8_t* selector;
+uint32_t* localPHT;
+uint8_t* localBHT;
 
 void updateSelector(uint8_t outcome) {
-	int p1Correct = p1 == outcome;
-	int p2Correct = p2 == outcome;
+	uint8_t p1 = localBHT[localBHTIndex];
+	uint8_t p2 = globalBHT[globalBHTIndex];
+	uint8_t p1Correct = (p1 == outcome);
+	uint8_t p2Correct = (p1 == outcome);
 	if(p1Correct > p2Correct) { // 1, 0
-		if(selector > 0) selector--;
+		if(selector[localPHTIndex] > 0) selector--;
 	}
 	else if(p1Correct < p2Correct) { // 0, 1
-		if(selector < 3) selector++;
-	} 
+		if(selector[localPHTIndex] < 3) selector++;
+	}
 }
 
-uint32_t* localPHT;
 void updateLocalPHT(uint8_t outcome) {
   localPHT[localPHTIndex] = (localPHT[localPHTIndex] << 1) | outcome;
   localPHT[localPHTIndex] &= maxLocalHistory;
 }
 
-uint8_t* localBHT;
 void updateLocalBHT(uint8_t outcome) {
 	assert(localBHTIndex >=0 && localBHTIndex < localBHTRows);
 	if(outcome == NOTTAKEN) {
@@ -147,7 +147,11 @@ init_predictor()
 		localBHT[i] = 1;
 	}
 
-	selector = 1;
+	selector = (uint8_t*)malloc(sizeof(uint8_t) * localPHTRows);
+	for(int i=0; i < localPHTRows; i++) {
+		assert(i < localPHTRows);
+		selector[i] = 1;
+	}
 }
 
 
@@ -159,9 +163,9 @@ uint8_t gshare_prediction(uint32_t pc) {
 }
 
 uint8_t tournament_prediction(uint32_t pc) {
-	if(selector <= 1) { // local
-		localPHTIndex = pc & maxPC;
-		assert(localPHTIndex >= 0 && localPHTIndex < localPHTRows);
+	localPHTIndex = pc & maxPC;
+	assert(localPHTIndex >= 0 && localPHTIndex < localPHTRows);
+	if(selector[localPHTIndex] <= 1) { // local
 		localBHTIndex = localPHT[localPHTIndex];
 		if(localBHT[localBHTIndex] == SN || localBHT[localBHTIndex] == WN) return NOTTAKEN;
 		else return TAKEN;
@@ -220,10 +224,10 @@ train_predictor(uint32_t pc, uint8_t outcome)
 			break;
 		case TOURNAMENT:
 			addGlobalHistory(outcome);
+			updateSelector(outcome);
 			updateGlobalBHT(outcome);
 			updateLocalPHT(outcome);
 			updateLocalBHT(outcome);
-			updateSelector(outcome);
 			break;
 		case CUSTOM:
 			break;
