@@ -134,19 +134,18 @@ void init_tournament() {
 	for(int i=0; i < globalBHTRows; i++) selector[i] = WN;
 }
 
-#define PCBITS 8
-#define PCSIZE 256
-#define HISTORYSIZE 18
 
 int8_t predictorWeight[PCSIZE][HISTORYSIZE + 1];
 uint8_t globalHistoryNN[HISTORYSIZE];
 uint8_t prediction;
 int out;
 
+int pcBias;
+
 void init_custom(){
 	globalHistory = 0;
 	pcIndexBits = PCBITS;
-	maxPC = (1 << pcIndexBits) - 1;
+	maxPC = ((1 << pcIndexBits) - 1) << pcBias;
 	for(int i = 0; i < PCSIZE; ++i){
 		for(int j = 0; j < HISTORYSIZE + 1; ++j)
 			predictorWeight[i][j] = 0;
@@ -156,7 +155,7 @@ void init_custom(){
 }
 
 uint8_t custom_prediction(uint32_t pc){
-	int pcIndex = pc & maxPC;
+	int pcIndex = (pc & maxPC) >> pcBias;
 	out = predictorWeight[pcIndex][0];
 	int tempHistory = globalHistory;
 	for(int i = 0; i < HISTORYSIZE; ++i){
@@ -169,9 +168,9 @@ uint8_t custom_prediction(uint32_t pc){
 
 int threshold = 20;
 void custom_train(uint32_t pc, uint8_t outcome){
-	int pcIndex = pc & maxPC;
+	int pcIndex = (pc & maxPC) >> pcBias;
 	int t = outcome? 1: -1;
-	predictorWeight[pcIndex][0] = t;
+	// predictorWeight[pcIndex][0] = t;
 	if(prediction != outcome || (out < threshold && out > -threshold)){
 		for(int i = 0; i < HISTORYSIZE; ++i){
 			int history = globalHistoryNN[i]? 1: -1;

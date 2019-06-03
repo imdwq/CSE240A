@@ -13,7 +13,6 @@
 FILE *stream;
 char *buf = NULL;
 size_t len = 0;
-
 // Print out the Usage information to stderr
 //
 void
@@ -47,8 +46,9 @@ handle_option(char *arg)
   } else if (!strncmp(arg,"--tournament:",13)) {
     bpType = TOURNAMENT;
     sscanf(arg+13,"%d:%d:%d", &ghistoryBits, &lhistoryBits, &pcIndexBits);
-  } else if (!strcmp(arg,"--custom")) {
+  } else if (!strncmp(arg,"--custom:", 9)) {
     bpType = CUSTOM;
+    sscanf(arg+9,"%d", &pcBias);
   } else if (!strcmp(arg,"--verbose")) {
     verbose = 1;
   } else {
@@ -132,6 +132,18 @@ main(int argc, char *argv[])
   printf("Incorrect:       %10d\n", mispredictions);
   float mispredict_rate = 100*((float)mispredictions / (float)num_branches);
   printf("Misprediction Rate: %7.3f\n", mispredict_rate);
+
+  if(bpType == CUSTOM){	
+    int maxweight = 0;	
+	  for(int i = 0; i < PCSIZE; ++i){	
+	  	for(int j = 0; j < HISTORYSIZE + 1; ++j){	
+        int gtz = predictorWeight[i][j] > 0? 1: -1;	
+        int weight = gtz * predictorWeight[i][j];	
+        maxweight = weight > maxweight? weight: maxweight;	
+      }	
+	  }	
+    printf("Maxweight:        %10d\n", maxweight);	
+  }
 
   // Cleanup
   fclose(stream);

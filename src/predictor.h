@@ -47,6 +47,11 @@ extern int pcIndexBits;  // Number of bits used for PC index
 extern int bpType;       // Branch Prediction Type
 extern int verbose;
 
+#define PCBITS 7
+#define PCSIZE 128
+#define HISTORYSIZE 18
+extern int8_t predictorWeight[PCSIZE][HISTORYSIZE + 1];
+extern int pcBias;
 //------------------------------------//
 //    Predictor Function Prototypes   //
 //------------------------------------//
