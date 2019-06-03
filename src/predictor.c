@@ -104,15 +104,7 @@ void updateLocalBHT(uint8_t outcome) {
 //        Predictor Functions         //
 //------------------------------------//
 
-// Initialize the predictor
-//
-void
-init_predictor()
-{
-  //
-  //TODO: Initialize Branch Predictor Data Structures
-  //
-	// gshare -- global predictor
+void init_global() {
 	globalHistory = 0;
 	maxGlobalHistory = (1 << ghistoryBits) - 1;
 	globalBHTRows = 1 << ghistoryBits;
@@ -121,8 +113,11 @@ init_predictor()
 	for(int i=0; i < globalBHTRows; i++) {
 		globalBHT[i] = WN;
 	}
+}
 
-	// tournament -- global + local
+void init_tournament() {
+	init_global();
+
 	maxPC = (1 << pcIndexBits) - 1;
 	localPHTRows = 1 << pcIndexBits;
 
@@ -139,6 +134,31 @@ init_predictor()
 	for(int i=0; i < globalBHTRows; i++) selector[i] = WN;
 }
 
+// Initialize the predictor
+//
+void
+init_predictor()
+{
+  //
+  //TODO: Initialize Branch Predictor Data Structures
+  //
+	switch(bpType) {
+		case STATIC:
+			break;
+		case GSHARE:
+			init_global();
+			break;
+		case TOURNAMENT:
+			init_tournament();
+			break;
+		case CUSTOM:
+			break;
+		default:
+			break;
+	}
+	
+}
+
 uint8_t two_bits_prediction(uint8_t *branchHistoryTable, int index){
 	switch(branchHistoryTable[index]){
 		case SN: ;
@@ -147,6 +167,12 @@ uint8_t two_bits_prediction(uint8_t *branchHistoryTable, int index){
 		case ST: return TAKEN;
 		default: assert(0); return -1;
 	}
+}
+
+uint8_t gshare_prediction(uint32_t pc) {
+	globalBHTIndex = (pc & maxGlobalHistory) ^ globalHistory;
+	assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
+	return two_bits_prediction(globalBHT, globalBHTIndex);
 }
 
 uint8_t global_prediction() {
@@ -158,12 +184,6 @@ uint8_t local_prediction(uint32_t pc) {
 	localPHTIndex = pc & maxPC;
 	localBHTIndex = localPHT[localPHTIndex];
 	return two_bits_prediction(localBHT, localBHTIndex);
-}
-
-uint8_t gshare_prediction(uint32_t pc) {
-	globalBHTIndex = (pc & maxGlobalHistory) ^ globalHistory;
-	assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
-	return two_bits_prediction(globalBHT, globalBHTIndex);
 }
 
 uint8_t tournament_prediction(uint32_t pc) {
