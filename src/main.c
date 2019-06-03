@@ -3,6 +3,12 @@
 //                                                        //
 //  Students need to implement various Branch Predictors  //
 //========================================================//
+#define PCBITS 8
+#define PCSIZE 256
+#define HISTORYSIZE 20
+
+extern int predictorWeight[PCSIZE][HISTORYSIZE + 1];
+
 
 #define _GNU_SOURCE
 #include <stdio.h>
@@ -132,6 +138,18 @@ main(int argc, char *argv[])
   printf("Incorrect:       %10d\n", mispredictions);
   float mispredict_rate = 100*((float)mispredictions / (float)num_branches);
   printf("Misprediction Rate: %7.3f\n", mispredict_rate);
+
+  if(bpType == CUSTOM){
+    int maxweight = 0;
+	  for(int i = 0; i < PCSIZE; ++i){
+	  	for(int j = 0; j < HISTORYSIZE + 1; ++j){
+        int gtz = predictorWeight[i][j] > 0? 1: -1;
+        int weight = gtz * predictorWeight[i][j];
+        maxweight = weight > maxweight? weight: maxweight;
+      }
+	  }
+    printf("Maxweight:        %10d\n", maxweight);
+  }
 
   // Cleanup
   fclose(stream);
