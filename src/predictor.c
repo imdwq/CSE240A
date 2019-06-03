@@ -77,7 +77,7 @@ uint8_t p2 = NOTTAKEN; // outcome of predictor 2
 uint8_t* selector;
 void updateSelector(uint8_t outcome) {
 	uint8_t p1Correct = (p1 == outcome);
-	uint8_t p2Correct = (p1 == outcome);
+	uint8_t p2Correct = (p2 == outcome);
 	if(p1Correct > p2Correct) { // 1, 0
 		if(selector[localPHTIndex] > 0) selector--;
 	}
@@ -146,11 +146,13 @@ init_predictor()
 }
 
 uint8_t global_prediction() {
+	globalBHTIndex = globalHistory & maxGlobalHistory;
 	if(globalBHT[globalBHTIndex] == SN || globalBHT[globalBHTIndex] == WN) return NOTTAKEN;
 	else return TAKEN;
 }
 
-uint8_t local_prediction() {
+uint8_t local_prediction(uint32_t pc) {
+	localPHTIndex = pc & maxPC;
 	localBHTIndex = localPHT[localPHTIndex];
 	if(localBHT[localBHTIndex] == SN || localBHT[localBHTIndex] == WN) return NOTTAKEN;
 	else return TAKEN;
@@ -159,15 +161,14 @@ uint8_t local_prediction() {
 uint8_t gshare_prediction(uint32_t pc) {
 	globalBHTIndex = (pc & maxGlobalHistory) ^ globalHistory;
 	assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
-	return global_prediction();
+	if(globalBHT[globalBHTIndex] == SN || globalBHT[globalBHTIndex] == WN) return NOTTAKEN;
+	else return TAKEN;
 }
 
 uint8_t tournament_prediction(uint32_t pc) {
 	// local predictor
-	localPHTIndex = pc & maxPC;
-	p1 = local_prediction();
+	p1 = local_prediction(pc);
 	// global predictor
-	globalBHTIndex = globalHistory & maxGlobalHistory;
 	p2 = global_prediction();
 
 	// select
