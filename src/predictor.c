@@ -136,10 +136,10 @@ void init_tournament() {
 
 #define PCBITS 8
 #define PCSIZE 256
-#define HISTORYSIZE 20
+#define HISTORYSIZE 18
 
-int predictorWeight[PCSIZE][HISTORYSIZE + 1];
-int globalHistoryNN[HISTORYSIZE];
+int8_t predictorWeight[PCSIZE][HISTORYSIZE + 1];
+uint8_t globalHistoryNN[HISTORYSIZE];
 uint8_t prediction;
 int out;
 
@@ -171,6 +171,7 @@ int threshold = 20;
 void custom_train(uint32_t pc, uint8_t outcome){
 	int pcIndex = pc & maxPC;
 	int t = outcome? 1: -1;
+	predictorWeight[pcIndex][0] = t;
 	if(prediction != outcome || (out < threshold && out > -threshold)){
 		for(int i = 0; i < HISTORYSIZE; ++i){
 			int history = globalHistoryNN[i]? 1: -1;
