@@ -37,13 +37,24 @@ int verbose;
 //TODO: Add your own Branch Predictor data structures here
 //
 
+void updateTwoBitsHistoryTable(uint8_t *historyTable, int index, uint8_t outcome){
+	if(outcome == NOTTAKEN) {
+		if(historyTable[index] != SN) 
+			historyTable[index]--;
+	}
+	else {
+		if(historyTable[index] != ST)
+			historyTable[index]++;
+	}
+}
+
 // gshare - global predictor
 int globalHistory;
 int maxGlobalHistory;
 
 void addGlobalHistory(uint8_t outcome) {
   globalHistory = (globalHistory << 1) | outcome;
-  globalHistory = globalHistory & maxGlobalHistory;
+  globalHistory &= maxGlobalHistory;
 }
 
 uint8_t* globalBHT;
@@ -51,16 +62,8 @@ int globalBHTRows;
 int globalBHTIndex;
 void updateGlobalBHT(uint8_t outcome) {
 	assert(globalBHTIndex < globalBHTRows);
-	if(outcome == NOTTAKEN) {
-		if(globalBHT[globalBHTIndex] != SN) 
-			globalBHT[globalBHTIndex] --;
-	}
-	else {
-		if(globalBHT[globalBHTIndex] != ST)
-			globalBHT[globalBHTIndex] ++;
-	}
+	updateTwoBitsHistoryTable(globalBHT, globalBHTIndex, outcome);
 }
-
 
 // tournament - local + global
 int maxPC;
@@ -78,11 +81,10 @@ uint8_t* selector;
 void updateSelector(uint8_t outcome) {
 	uint8_t p1Correct = (p1 == outcome);
 	uint8_t p2Correct = (p2 == outcome);
-	if(p1Correct > p2Correct) { // 1, 0
-		if(selector[localPHTIndex] > 0) selector--;
-	}
+	if(p1Correct > p2Correct) // 1, 0
+		updateTwoBitsHistoryTable(selector, globalBHTIndex, TAKEN);
 	else if(p1Correct < p2Correct) { // 0, 1
-		if(selector[localPHTIndex] < 3) selector++;
+		updateTwoBitsHistoryTable(selector, globalBHTIndex, NOTTAKEN);
 	}
 }
 
@@ -94,15 +96,8 @@ void updateLocalPHT(uint8_t outcome) {
 
 uint8_t* localBHT;
 void updateLocalBHT(uint8_t outcome) {
-	assert(localBHTIndex >=0 && localBHTIndex < localBHTRows);
-	if(outcome == NOTTAKEN) {
-		if(localBHT[localBHTIndex] != SN) 
-			localBHT[localBHTIndex] --;
-	}
-	else {
-		if(localBHT[localBHTIndex] != ST) 
-			localBHT[localBHTIndex] ++;
-	}
+	assert(localBHTIndex >= 0 && localBHTIndex < localBHTRows);
+	updateTwoBitsHistoryTable(localBHT, localBHTIndex, outcome);
 }
 
 //------------------------------------//
@@ -124,7 +119,7 @@ init_predictor()
 
 	globalBHT = (uint8_t*)malloc(sizeof(uint8_t) * globalBHTRows);
 	for(int i=0; i < globalBHTRows; i++) {
-		globalBHT[i] = 1;
+		globalBHT[i] = WN;
 	}
 
 	// tournament -- global + local
@@ -138,31 +133,37 @@ init_predictor()
 	for(int i=0; i < localPHTRows; i++) localPHT[i] = 0;
 
 	localBHT = (uint8_t*)malloc(sizeof(uint8_t) * localBHTRows);
-	for(int i=0; i < localBHTRows; i++) localBHT[i] = 1;
+	for(int i=0; i < localBHTRows; i++) localBHT[i] = WN;
 
-	selector = (uint8_t*)malloc(sizeof(uint8_t) * localPHTRows);
-	for(int i=0; i < localPHTRows; i++) selector[i] = 1;
+	selector = (uint8_t*)malloc(sizeof(uint8_t) * globalBHTRows);
+	for(int i=0; i < globalBHTRows; i++) selector[i] = WN;
+}
 
+uint8_t two_bits_prediction(uint8_t *branchHistoryTable, int index){
+	switch(branchHistoryTable[index]){
+		case SN: ;
+		case WN: return NOTTAKEN;
+		case WT: ;
+		case ST: return TAKEN;
+		default: assert(0); return -1;
+	}
 }
 
 uint8_t global_prediction() {
 	globalBHTIndex = globalHistory & maxGlobalHistory;
-	if(globalBHT[globalBHTIndex] == SN || globalBHT[globalBHTIndex] == WN) return NOTTAKEN;
-	else return TAKEN;
+	return two_bits_prediction(globalBHT, globalBHTIndex);
 }
 
 uint8_t local_prediction(uint32_t pc) {
 	localPHTIndex = pc & maxPC;
 	localBHTIndex = localPHT[localPHTIndex];
-	if(localBHT[localBHTIndex] == SN || localBHT[localBHTIndex] == WN) return NOTTAKEN;
-	else return TAKEN;
+	return two_bits_prediction(localBHT, localBHTIndex);
 }
 
 uint8_t gshare_prediction(uint32_t pc) {
 	globalBHTIndex = (pc & maxGlobalHistory) ^ globalHistory;
 	assert(globalBHTIndex >= 0 && globalBHTIndex < globalBHTRows);
-	if(globalBHT[globalBHTIndex] == SN || globalBHT[globalBHTIndex] == WN) return NOTTAKEN;
-	else return TAKEN;
+	return two_bits_prediction(globalBHT, globalBHTIndex);
 }
 
 uint8_t tournament_prediction(uint32_t pc) {
@@ -170,10 +171,8 @@ uint8_t tournament_prediction(uint32_t pc) {
 	p1 = local_prediction(pc);
 	// global predictor
 	p2 = global_prediction();
-
-	// select
-	if(selector[localPHTIndex] <= 1) return p1; // local
-	else return p2; // global
+	// select global if not taken else local
+	return two_bits_prediction(selector, globalBHTIndex)? p1: p2;
 }
 
 // Make a prediction for conditional branch instruction at PC 'pc'
