@@ -1,0 +1,227 @@
+----tournament:12:12:12----
+Misprediction Rate:   0.992
+Misprediction Rate:   0.411
+Misprediction Rate:   9.615
+Misprediction Rate:   0.329
+Misprediction Rate:   0.953
+Misprediction Rate:   6.784
+----custom:12:25:2----
+Misprediction Rate:   0.902
+Misprediction Rate:   1.659
+Misprediction Rate:   9.940
+Misprediction Rate:   0.372
+Misprediction Rate:   4.436
+Misprediction Rate:   7.639
+**----custom:12:30:2----
+Misprediction Rate:   0.904
+Misprediction Rate:   1.517
+Misprediction Rate:   9.853
+Misprediction Rate:   0.370
+Misprediction Rate:   4.346
+Misprediction Rate:   7.715
+**----custom:12:35:2----
+Misprediction Rate:   0.904
+Misprediction Rate:   1.476
+Misprediction Rate:   9.799
+Misprediction Rate:   0.371
+Misprediction Rate:   4.319
+Misprediction Rate:   7.797
+**----custom:12:40:2----
+Misprediction Rate:   0.905
+Misprediction Rate:   1.477
+Misprediction Rate:   9.769
+Misprediction Rate:   0.371
+Misprediction Rate:   4.145
+Misprediction Rate:   7.866
+----custom:12:45:2----
+Misprediction Rate:   0.905
+Misprediction Rate:   1.520
+Misprediction Rate:   9.757
+Misprediction Rate:   0.374
+Misprediction Rate:   4.151
+Misprediction Rate:   7.953
+----custom:16:25:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.106
+Misprediction Rate:   9.796
+Misprediction Rate:   0.337
+Misprediction Rate:   3.861
+Misprediction Rate:   7.264
+**----custom:16:30:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.107
+Misprediction Rate:   9.665
+Misprediction Rate:   0.334
+Misprediction Rate:   3.717
+Misprediction Rate:   7.317
+**----custom:16:35:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.109
+Misprediction Rate:   9.587
+Misprediction Rate:   0.330
+Misprediction Rate:   3.604
+Misprediction Rate:   7.356
+**----custom:16:40:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.110
+Misprediction Rate:   9.528
+Misprediction Rate:   0.331
+Misprediction Rate:   3.591
+Misprediction Rate:   7.420
+----custom:16:45:2----
+Misprediction Rate:   0.818
+Misprediction Rate:   1.111
+Misprediction Rate:   9.492
+Misprediction Rate:   0.333
+Misprediction Rate:   3.529
+Misprediction Rate:   7.481
+----custom:20:25:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.103
+Misprediction Rate:   8.496
+Misprediction Rate:   0.317
+Misprediction Rate:   3.199
+Misprediction Rate:   7.133
+----custom:20:30:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.104
+Misprediction Rate:   8.347
+Misprediction Rate:   0.313
+Misprediction Rate:   3.072
+Misprediction Rate:   7.145
+----custom:20:35:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.105
+Misprediction Rate:   8.252
+Misprediction Rate:   0.311
+Misprediction Rate:   2.966
+Misprediction Rate:   7.184
+----custom:20:40:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.106
+Misprediction Rate:   8.182
+Misprediction Rate:   0.309
+Misprediction Rate:   3.007
+Misprediction Rate:   7.223
+----custom:20:45:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.106
+Misprediction Rate:   8.123
+Misprediction Rate:   0.310
+Misprediction Rate:   2.945
+Misprediction Rate:   7.262
+
+
+----custom:24:25:2----
+Misprediction Rate:   0.815
+Misprediction Rate:   1.115
+Misprediction Rate:   8.334
+Misprediction Rate:   0.308
+Misprediction Rate:   2.466
+Misprediction Rate:   7.008
+
+0.815+1.115+8.334+0.308+2.466+7.008 = 20.046
+
+----custom:24:30:2----
+Misprediction Rate:   0.815
+Misprediction Rate:   1.104
+Misprediction Rate:   8.166
+Misprediction Rate:   0.307
+Misprediction Rate:   2.415
+Misprediction Rate:   7.017
+
+0.815+1.104+8.166+0.307+2.415+7.017 = 19.824
+
+
+----custom:24:35:2----
+Misprediction Rate:   0.815
+Misprediction Rate:   1.104
+Misprediction Rate:   8.066
+Misprediction Rate:   0.304
+Misprediction Rate:   2.415
+Misprediction Rate:   7.042
+
+0.815+1.104+8.066+0.304+2.415+7.042 = 19.746
+
+
+----custom:24:40:2----
+Misprediction Rate:   0.815
+Misprediction Rate:   1.105
+Misprediction Rate:   7.970
+Misprediction Rate:   0.302
+Misprediction Rate:   2.467
+Misprediction Rate:   7.067
+
+0.815+1.105+7.970+0.302+2.467+7.067 = 19.726
+
+
+----custom:24:45:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.106
+Misprediction Rate:   7.902
+Misprediction Rate:   0.300
+Misprediction Rate:   2.484
+Misprediction Rate:   7.097
+
+0.816+1.106+7.902+0.300+2.484+7.097 = 19.705
+
+----custom:24:50:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.106
+Misprediction Rate:   7.843
+Misprediction Rate:   0.300
+Misprediction Rate:   2.483
+Misprediction Rate:   7.139
+
+0.816+1.106+7.843+0.300+2.483+7.139 = 19.687
+
+----custom:24:55:2----
+Misprediction Rate:   0.816
+Misprediction Rate:   1.106
+Misprediction Rate:   7.814
+Misprediction Rate:   0.300
+Misprediction Rate:   2.477
+Misprediction Rate:   7.174
+
+0.816+1.106+7.814+0.300+2.477+7.174 = 19.687
+
+
+----custom:28:25:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.241
+Misprediction Rate:   8.223
+Misprediction Rate:   0.306
+Misprediction Rate:   2.280
+Misprediction Rate:   7.003
+**----custom:28:30:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.104
+Misprediction Rate:   8.055
+Misprediction Rate:   0.301
+Misprediction Rate:   2.202
+Misprediction Rate:   6.981
+**----custom:28:35:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.105
+Misprediction Rate:   7.947
+Misprediction Rate:   0.301
+Misprediction Rate:   2.170
+Misprediction Rate:   7.001
+**----custom:28:40:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.106
+Misprediction Rate:   7.860
+Misprediction Rate:   0.301
+Misprediction Rate:   2.162
+Misprediction Rate:   7.015
+----custom:28:45:2----
+Misprediction Rate:   0.817
+Misprediction Rate:   1.106
+Misprediction Rate:   7.791
+Misprediction Rate:   0.296
+Misprediction Rate:   2.194
+Misprediction Rate:   7.031
+
+
+
+

@@ -48,6 +48,9 @@ handle_option(char *arg)
     sscanf(arg+13,"%d:%d:%d", &ghistoryBits, &lhistoryBits, &pcIndexBits);
   } else if (!strncmp(arg,"--custom:", 9)) {
     bpType = CUSTOM;
+    sscanf(arg+9,"%d:%d:%d", &historySize, &threshold, &pcBias);
+  } else if (!strncmp(arg,"--customTour:", 13)) {
+    bpType = CUSTOMTOUR;
     sscanf(arg+9,"%d", &pcBias);
   } else if (!strcmp(arg,"--verbose")) {
     verbose = 1;
@@ -133,17 +136,25 @@ main(int argc, char *argv[])
   float mispredict_rate = 100*((float)mispredictions / (float)num_branches);
   printf("Misprediction Rate: %7.3f\n", mispredict_rate);
 
-  if(bpType == CUSTOM){	
-    int maxweight = 0;	
-	  for(int i = 0; i < PCSIZE; ++i){	
-	  	for(int j = 0; j < HISTORYSIZE + 1; ++j){	
-        int gtz = predictorWeight[i][j] > 0? 1: -1;	
-        int weight = gtz * predictorWeight[i][j];	
-        maxweight = weight > maxweight? weight: maxweight;	
-      }	
-	  }	
-    printf("Maxweight:        %10d\n", maxweight);	
-  }
+  // if(bpType == CUSTOM){	
+  //   int maxweight = 0;	
+	//   for(int i = 0; i < PCSIZE; ++i){	
+	//   	for(int j = 0; j < HISTORYSIZE + 1; ++j){	
+  //       int gtz = predictorWeight[i][j] > 0? 1: -1;	
+  //       int weight = gtz * predictorWeight[i][j];	
+  //       maxweight = weight > maxweight? weight: maxweight;	
+  //     }	
+	//   }	
+  //   printf("Maxweight:        %10d\n", maxweight);	
+  // }
+
+  // if(bpType == TOURNAMENT || bpType == CUSTOMTOUR){
+  //   float mispredict_rate;
+  //   mispredict_rate = 100*((float)(num_branches - p1CorrectCount) / (float)num_branches);
+  //   printf("P1Misprediction Rate: %7.3f\n", mispredict_rate);
+  //   mispredict_rate = 100*((float)(num_branches - p2CorrectCount) / (float)num_branches);
+  //   printf("P2Misprediction Rate: %7.3f\n", mispredict_rate);
+  // }
 
   // Cleanup
   fclose(stream);

@@ -77,6 +77,9 @@ int localBHTIndex;
 uint8_t p1 = NOTTAKEN; // outcome of predictor 1
 uint8_t p2 = NOTTAKEN; // outcome of predictor 2
 
+int p1CorrectCount = 0;
+int p2CorrectCount = 0;
+
 uint8_t* selector;
 void updateSelector(uint8_t outcome) {
 	uint8_t p1Correct = (p1 == outcome);
@@ -86,6 +89,8 @@ void updateSelector(uint8_t outcome) {
 	else if(p1Correct < p2Correct) { // 0, 1
 		updateTwoBitsHistoryTable(selector, globalBHTIndex, NOTTAKEN);
 	}
+	p1CorrectCount += p1Correct;
+	p2CorrectCount += p2Correct;
 }
 
 uint32_t* localPHT;
@@ -134,31 +139,35 @@ void init_tournament() {
 	for(int i=0; i < globalBHTRows; i++) selector[i] = WN;
 }
 
-
-int8_t predictorWeight[PCSIZE][HISTORYSIZE + 1];
-uint8_t globalHistoryNN[HISTORYSIZE];
-uint8_t prediction;
-int out;
-
+// storage
+int8_t predictorWeight[PCSIZE][MAXHISTORYSIZE + 1];
+uint8_t globalHistoryNN[MAXHISTORYSIZE];  // Actually store bits
+int historySize;
+int threshold;
 int pcBias;
 
+// temp global
+uint8_t prediction;
+int out;
+int nnPCIndex;
+int nnPCMask;
+
 void init_custom(){
-	globalHistory = 0;
-	pcIndexBits = PCBITS;
-	maxPC = ((1 << pcIndexBits) - 1) << pcBias;
+	nnPCIndex = PCBITS;
+	nnPCMask = ((1 << nnPCIndex) - 1) << pcBias;
 	for(int i = 0; i < PCSIZE; ++i){
-		for(int j = 0; j < HISTORYSIZE + 1; ++j)
+		for(int j = 0; j < historySize + 1; ++j)
 			predictorWeight[i][j] = 0;
 	}
-	for(int i = 0; i < HISTORYSIZE; ++i)
+	for(int i = 0; i < historySize; ++i)
 		globalHistoryNN[i] = NOTTAKEN;
 }
 
 uint8_t custom_prediction(uint32_t pc){
-	int pcIndex = (pc & maxPC) >> pcBias;
+	int pcIndex = (pc & nnPCMask) >> pcBias;
+	// out = bias[pcIndex];
 	out = predictorWeight[pcIndex][0];
-	int tempHistory = globalHistory;
-	for(int i = 0; i < HISTORYSIZE; ++i){
+	for(int i = 0; i < historySize; ++i){
 		int history = globalHistoryNN[i]? 1: -1;
 		out += predictorWeight[pcIndex][i+1] * history;
 	}
@@ -166,20 +175,34 @@ uint8_t custom_prediction(uint32_t pc){
 	return prediction; 
 }
 
-int threshold = 20;
 void custom_train(uint32_t pc, uint8_t outcome){
-	int pcIndex = (pc & maxPC) >> pcBias;
-	int t = outcome? 1: -1;
-	// predictorWeight[pcIndex][0] = t;
+	int pcIndex = (pc & nnPCMask) >> pcBias;
 	if(prediction != outcome || (out < threshold && out > -threshold)){
-		for(int i = 0; i < HISTORYSIZE; ++i){
+		for(int i = 0; i < historySize; ++i){
 			int history = globalHistoryNN[i]? 1: -1;
-			predictorWeight[pcIndex][i+1] += t * history;
+			if(outcome == globalHistoryNN[i] && predictorWeight[pcIndex][i+1] < 127)
+					predictorWeight[pcIndex][i+1]++;
+			else if(outcome != globalHistoryNN[i] && predictorWeight[pcIndex][i+1] > -128)
+					predictorWeight[pcIndex][i+1]--;
 		}
+
+		if(predictorWeight[pcIndex][0] < 127 && outcome)
+			predictorWeight[pcIndex][0]++;
+		else if(predictorWeight[pcIndex][0] > -128 && !outcome)
+			predictorWeight[pcIndex][0]--;
+
 	}
-	for(int i = HISTORYSIZE - 1; i > 0; --i)
+	for(int i = historySize - 1; i > 0; --i)
 		globalHistoryNN[i] = globalHistoryNN[i-1];
 	globalHistoryNN[0] = outcome;
+}
+
+void init_customTournament(){
+	ghistoryBits = 12;
+	init_global();
+	init_custom();
+	selector = (uint8_t*)malloc(sizeof(uint8_t) * globalBHTRows);
+	for(int i=0; i < globalBHTRows; i++) selector[i] = WN;
 }
 
 // Initialize the predictor
@@ -202,6 +225,8 @@ init_predictor()
 		case CUSTOM:
 			init_custom();
 			break;
+		case CUSTOMTOUR:
+			init_customTournament();
 		default:
 			break;
 	}
@@ -244,6 +269,15 @@ uint8_t tournament_prediction(uint32_t pc) {
 	return two_bits_prediction(selector, globalBHTIndex)? p1: p2;
 }
 
+uint8_t tournament_predictionNNwithGshare(uint32_t pc){
+	// local predictor
+	p1 = custom_prediction(pc);
+	// global predictor
+	p2 = global_prediction();
+	// select global if not taken else local
+	return two_bits_prediction(selector, globalBHTIndex)? p1: p2;
+}
+
 // Make a prediction for conditional branch instruction at PC 'pc'
 // Returning TAKEN indicates a prediction of taken; returning NOTTAKEN
 // indicates a prediction of not taken
@@ -264,6 +298,8 @@ make_prediction(uint32_t pc)
     	return tournament_prediction(pc);
     case CUSTOM:
 			return custom_prediction(pc);
+		case CUSTOMTOUR:
+			return tournament_predictionNNwithGshare(pc);
     default:
       break;
   }
@@ -299,6 +335,11 @@ train_predictor(uint32_t pc, uint8_t outcome)
 		case CUSTOM:
 			custom_train(pc, outcome);
 			break;
+		case CUSTOMTOUR:
+			addGlobalHistory(outcome);
+			updateSelector(outcome);
+			updateGlobalBHT(outcome);
+			custom_train(pc, outcome);
 		default:
 			break;
 	}

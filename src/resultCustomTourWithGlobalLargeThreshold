@@ -1,0 +1,248 @@
+----tournament:12:12:12----
+Branches:           1546797
+Incorrect:            15344
+Misprediction Rate:   0.992
+P1Misprediction Rate:   1.069
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:             9949
+Misprediction Rate:   0.411
+P1Misprediction Rate:   0.960
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           362656
+Misprediction Rate:   9.615
+P1Misprediction Rate:  12.609
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            12363
+Misprediction Rate:   0.329
+P1Misprediction Rate:   0.374
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            28725
+Misprediction Rate:   0.953
+P1Misprediction Rate:   1.865
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           173937
+Misprediction Rate:   6.784
+P1Misprediction Rate:   7.377
+P2Misprediction Rate:  11.636
+----customTour:0----
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636
+----customTour:1----
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636
+----customTour:2----
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636
+----customTour:3----
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636
+----customTour:4----
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636
+----customTour:5----
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636
+----customTour:6----
+Branches:           1546797
+Incorrect:            12654
+Misprediction Rate:   0.818
+P1Misprediction Rate:   0.817
+P2Misprediction Rate:   2.045
+Branches:           2422049
+Incorrect:            26880
+Misprediction Rate:   1.110
+P1Misprediction Rate:   1.107
+P2Misprediction Rate:   5.355
+Branches:           3771697
+Incorrect:           300257
+Misprediction Rate:   7.961
+P1Misprediction Rate:   8.573
+P2Misprediction Rate:  14.962
+Branches:           3755315
+Incorrect:            11990
+Misprediction Rate:   0.319
+P1Misprediction Rate:   0.316
+P2Misprediction Rate:   0.869
+Branches:           3014850
+Incorrect:            88207
+Misprediction Rate:   2.926
+P1Misprediction Rate:   3.018
+P2Misprediction Rate:   7.497
+Branches:           2563897
+Incorrect:           180643
+Misprediction Rate:   7.046
+P1Misprediction Rate:   7.379
+P2Misprediction Rate:  11.636

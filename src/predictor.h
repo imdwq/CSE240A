@@ -30,6 +30,7 @@ extern const char *email;
 #define GSHARE      1
 #define TOURNAMENT  2
 #define CUSTOM      3
+#define CUSTOMTOUR 4
 extern const char *bpName[];
 
 // Definitions for 2-bit counters
@@ -47,11 +48,15 @@ extern int pcIndexBits;  // Number of bits used for PC index
 extern int bpType;       // Branch Prediction Type
 extern int verbose;
 
-#define PCBITS 7
-#define PCSIZE 128
-#define HISTORYSIZE 18
-extern int8_t predictorWeight[PCSIZE][HISTORYSIZE + 1];
+#define PCBITS 8
+#define PCSIZE (1 << PCBITS)
+#define MAXHISTORYSIZE 50
+extern int8_t predictorWeight[PCSIZE][MAXHISTORYSIZE + 1];
+extern int historySize;
+extern int threshold;
 extern int pcBias;
+extern int p1CorrectCount;
+extern int p2CorrectCount;
 //------------------------------------//
 //    Predictor Function Prototypes   //
 //------------------------------------//
